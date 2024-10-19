@@ -15,5 +15,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@material-ui/core@4.12.3/umd/material-ui.min.js"></script>
     <script src="app.js"></script>
+    <div id="qrcode"></div>
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+<script>
+    new QRCode(document.getElementById("qrcode"), window.location.href);
+</script>
 </body>
 </html>
