@@ -2,36 +2,34 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-}
-
-#app {
     display: flex;
     height: 100vh;
 }
 
-.editor {
-    flex: 1;
+#app {
+    display: flex;
+    width: 100%;
+}
+
+#editor {
+    width: 300px;
     padding: 20px;
-}
-
-.preview {
-    flex: 1;
     background-color: #f0f0f0;
+    overflow-y: auto;
 }
 
-button {
-    margin: 5px;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
+#arView {
+    flex-grow: 1;
 }
 
-button:hover {
-    background-color: #45a049;
+input[type="file"] {
+    margin-bottom: 20px;
 }
 
-#qrcode {
+#modelList {
+    margin-bottom: 20px;
+}
+
+#propertyEditor {
     margin-top: 20px;
 }
