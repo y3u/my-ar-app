@@ -1,126 +1,19 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AR Experience</title>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAR Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- アプリケーションの内容はここに追加されます -->
+    </div>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
-    <script>
-      AFRAME.registerComponent('model-opacity', {
-        schema: {default: 1.0},
-        init: function () {
-          this.el.addEventListener('model-loaded', this.update.bind(this));
-        },
-        update: function () {
-          var mesh = this.el.getObject3D('mesh');
-          var data = this.data;
-          if (!mesh) { return; }
-          mesh.traverse(function (node) {
-            if (node.isMesh) {
-              node.material.opacity = data;
-              node.material.transparent = data < 1.0;
-              node.material.needsUpdate = true;
-            }
-          });
-        }
-      });
-
-      AFRAME.registerComponent('play-all-model-animations', {
-        init: function () {
-          this.model = null;
-          this.mixer = null;
-
-          var model = this.el.getObject3D('mesh');
-          if (model) {
-            this.load(model);
-          } else {
-            this.el.addEventListener('model-loaded', e => {
-              this.load(e.detail.model);
-            });
-          }
-        },
-
-        load: function (model) {
-          this.model = model;
-          this.mixer = new THREE.AnimationMixer(model);
-          this.model.animations.forEach(animation => {
-            this.mixer.clipAction(animation).play();
-          });
-        },
-
-        tick: function (t, dt) {
-          if (this.mixer && !isNaN(dt)) {
-            this.mixer.update(dt / 1000);
-          }
-        }
-      });
-    </script>
-  </head>
-  <body style="margin: 0; overflow: hidden;">
-    <a-scene
-      vr-mode-ui="enabled: false"
-      loading-screen="enabled: false;"
-      arjs='sourceType: webcam; debugUIEnabled: false;'
-      renderer="logarithmicDepthBuffer: true;"
-      embedded
-    >
-      <a-assets>
-        <a-asset-item id="animated-asset" src="https://raw.githubusercontent.com/nicolocarpignoli/nicolocarpignoli.github.io/master/ar-playground/models/CesiumMan.gltf"></a-asset-item>
-      </a-assets>
-
-      <a-marker preset="hiro">
-        <a-entity
-          position="0 0 0"
-          rotation="0 0 0"
-          scale="0.05 0.05 0.05"
-          gltf-model="#animated-asset"
-          animation-mixer
-        >
-        </a-entity>
-      </a-marker>
-
-      <a-entity camera></a-entity>
-    </a-scene>
-
-    <div style="position: fixed; bottom: 10px; left: 10px; width: 100%; text-align: center; z-index: 1; color: white;">
-      <button id="playButton" style="padding: 10px;">Play</button>
-      <button id="pauseButton" style="padding: 10px;">Pause</button>
-      <input type="range" id="scaleSlider" min="0.01" max="0.2" step="0.01" value="0.05" style="width: 200px;">
-      <span id="scaleValue">Scale: 0.05</span>
-    </div>
-
-    <script>
-      var model = document.querySelector('[gltf-model]');
-      var mixer = null;
-      var animationAction = null;
-
-      model.addEventListener('model-loaded', function () {
-        mixer = model.components['animation-mixer'].mixer;
-        animationAction = mixer.clipAction(model.object3D.animations[0]);
-      });
-
-      document.getElementById('playButton').addEventListener('click', function () {
-        if (animationAction) {
-          animationAction.play();
-        }
-      });
-
-      document.getElementById('pauseButton').addEventListener('click', function () {
-        if (animationAction) {
-          animationAction.pause();
-        }
-      });
-
-      var scaleSlider = document.getElementById('scaleSlider');
-      var scaleValue = document.getElementById('scaleValue');
-
-      scaleSlider.addEventListener('input', function () {
-        var scale = parseFloat(this.value);
-        model.setAttribute('scale', scale + ' ' + scale + ' ' + scale);
-        scaleValue.textContent = 'Scale: ' + scale.toFixed(2);
-      });
-    </script>
-  </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@material-ui/core@4.12.3/umd/material-ui.min.js"></script>
+    <script src="app.js"></script>
+</body>
 </html>
