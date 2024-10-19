@@ -2,34 +2,74 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    height: 100vh;
 }
 
 #app {
     display: flex;
-    width: 100%;
+    height: 100vh;
 }
 
-#editor {
-    width: 300px;
+.editor {
+    flex: 1;
     padding: 20px;
-    background-color: #f0f0f0;
     overflow-y: auto;
 }
 
-#arView {
-    flex-grow: 1;
+.preview {
+    flex: 1;
+    background-color: #f0f0f0;
 }
 
-input[type="file"] {
-    margin-bottom: 20px;
+button {
+    margin: 5px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
-#modelList {
-    margin-bottom: 20px;
+button:hover {
+    background-color: #45a049;
 }
 
-#propertyEditor {
+#qrcode {
     margin-top: 20px;
+}
+
+.model-list {
+    margin-top: 20px;
+}
+
+.model-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.model-list li {
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+}
+
+.model-list li:hover {
+    background-color: #f0f0f0;
+}
+
+#imagePreview img {
+    max-width: 100%;
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    #app {
+        flex-direction: column;
+    }
+    
+    .editor, .preview {
+        flex: none;
+        width: 100%;
+        height: 50vh;
+    }
 }
