@@ -1,36 +1,60 @@
-import { AREditor } from './AREditor.js';
-import { ScreenEditor } from './ScreenEditor.js';
-import { ModelList } from './ModelList.js';
-import { QRCodeGenerator } from './QRCodeGenerator.js';
+document.addEventListener('DOMContentLoaded', () => {
+    const modelUpload = document.getElementById('modelUpload');
+    const modelList = document.getElementById('modelList');
+    const propertyEditor = document.getElementById('propertyEditor');
+    const scene = document.querySelector('a-scene');
 
-class App {
-    constructor() {
-        this.arEditor = new AREditor();
-        this.screenEditor = new ScreenEditor();
-        this.modelList = new ModelList();
-        this.qrCodeGenerator = new QRCodeGenerator();
+    let models = [];
 
-        this.render();
+    modelUpload.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const model = {
+                name: file.name,
+                url: URL.createObjectURL(file)
+            };
+            models.push(model);
+            updateModelList();
+        }
+    });
+
+    function updateModelList() {
+        modelList.innerHTML = '';
+        models.forEach((model, index) => {
+            const modelItem = document.createElement('div');
+            modelItem.textContent = model.name;
+            modelItem.addEventListener('click', () => addModelToScene(model, index));
+            modelList.appendChild(modelItem);
+        });
     }
 
-    render() {
-        const appDiv = document.getElementById('app');
-        appDiv.innerHTML = `
-            <div class="editor">
-                <h1>WebAR Editor</h1>
-                <div id="arEditor"></div>
-                <div id="screenEditor"></div>
-                <div id="modelList"></div>
-                <div id="qrCodeGenerator"></div>
-            </div>
-            <div class="preview" id="preview"></div>
+    function addModelToScene(model, index) {
+        const entity = document.createElement('a-entity');
+        entity.setAttribute('gltf-model', model.url);
+        entity.setAttribute('position', '0 0 -1');
+        entity.setAttribute('scale', '0.1 0.1 0.1');
+        scene.appendChild(entity);
+
+        updatePropertyEditor(entity, index);
+    }
+
+    function updatePropertyEditor(entity, modelIndex) {
+        propertyEditor.innerHTML = `
+            <h3>Properties</h3>
+            <label>Position X: <input type="number" id="posX" step="0.1" value="0"></label>
+            <label>Position Y: <input type="number" id="posY" step="0.1" value="0"></label>
+            <label>Position Z: <input type="number" id="posZ" step="0.1" value="-1"></label>
+            <label>Scale: <input type="number" id="scale" step="0.1" value="0.1"></label>
         `;
 
-        this.arEditor.render(document.getElementById('arEditor'));
-        this.screenEditor.render(document.getElementById('screenEditor'));
-        this.modelList.render(document.getElementById('modelList'));
-        this.qrCodeGenerator.render(document.getElementById('qrCodeGenerator'));
-    }
-}
+        const posX = document.getElementById('posX');
+        const posY = document.getElementById('posY');
+        const posZ = document.getElementById('posZ');
+        const scale = document.getElementById('scale');
 
-new App();
+        posX.addEventListener('change', () => entity.setAttribute('position', `${posX.value} ${posY.value} ${posZ.value}`));
+        posY.addEventListener('change', () => entity.setAttribute('position', `${posX.value} ${posY.value} ${posZ.value}`));
+        posZ.addEventListener('change', () => entity.setAttribute('position', `${posX.value} ${posY.value} ${posZ.value}`));
+        scale.addEventListener('change', () => entity.setAttribute('scale', `${scale.value} ${scale.value} ${scale.value}`));
+    }
+});
