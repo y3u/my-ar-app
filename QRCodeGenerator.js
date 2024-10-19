@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import QRCode from 'qrcode.react';
+export class QRCodeGenerator {
+    render(container) {
+        container.innerHTML = `
+            <h2>QR Code Generator</h2>
+            <button id="generateQR">Generate QR Code</button>
+            <div id="qrcode"></div>
+        `;
 
-export function QRCodeGenerator() {
-  const [url, setUrl] = useState('');
+        this.addEventListeners(container);
+    }
 
-  const generateQRCode = () => {
-    // ここでWebAR体験用のURLを生成
-    const experienceUrl = `https://your-domain.com/ar-experience/${Date.now()}`;
-    setUrl(experienceUrl);
-  };
-
-  return (
-    <div className="qr-generator">
-      <button onClick={generateQRCode}>QRコード生成</button>
-      {url && <QRCode value={url} />}
-    </div>
-  );
+    addEventListeners(container) {
+        container.querySelector('#generateQR').addEventListener('click', () => {
+            const url = window.location.href;
+            const qrContainer = container.querySelector('#qrcode');
+            qrContainer.innerHTML = '';
+            new QRCode(qrContainer, url);
+        });
+    }
 }
